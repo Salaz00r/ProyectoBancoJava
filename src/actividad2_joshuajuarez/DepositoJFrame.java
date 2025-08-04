@@ -1,8 +1,13 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
 package actividad2_joshuajuarez;
+
+import actividad2_joshuajuarez.MenuJFrame;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import javax.swing.JOptionPane;
 
@@ -100,24 +105,49 @@ public class DepositoJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jtfDepositarActionPerformed
 
     private void jbtnDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDepositarActionPerformed
-        // TODO add your handling code here:
-        int respuesta = JOptionPane.showConfirmDialog(
+
+       // Diálogo para saber si se desea hacer otro depósito
+    int respuesta = JOptionPane.showConfirmDialog(
         this,
         "¿Desea realizar otro depósito?",
         "Depósito",
         JOptionPane.YES_NO_OPTION
     );
-        if (respuesta == JOptionPane.YES_OPTION){
-            //Abrir otra vez ventana deposito
-            DepositoJFrame nuevoDeposito = new DepositoJFrame();
-            nuevoDeposito.setVisible(true);
-            this.dispose();
+
+    if (respuesta == JOptionPane.YES_OPTION){
+        DepositoJFrame nuevoDeposito = new DepositoJFrame();
+        nuevoDeposito.setVisible(true);
+        this.dispose();
+    } else {
+        MenuJFrame menu = new MenuJFrame();
+        menu.setVisible(true);
+        this.dispose();
+    }   
+        
+        
+        
+    Connection con;
+    Conexion conn = new Conexion();
+    
+    try{
+        con = (Connection) conn.getConnection();
+        PreparedStatement ps = con.prepareStatement("UPDATE cuenta SET saldo = saldo + ? WHERE id = 1");
+        ps.setString(1,jtfDepositar.getText());
+        int res = ps.executeUpdate();
+        
+        if(res >0){
+            JOptionPane.showMessageDialog(null, "Depósito exitoso");
         }else {
-            //Regresar al menú principal
-            MenuJFrame menu = new MenuJFrame();
-            menu.setVisible(false);
-            this.dispose();
+            JOptionPane.showMessageDialog(null, "Error en depósito");
         }
+        
+        con.close();
+        
+    }catch(Exception e){
+        System.err.print(e);
+        
+    }
+          
     }//GEN-LAST:event_jbtnDepositarActionPerformed
 
     /**
@@ -151,4 +181,5 @@ public class DepositoJFrame extends javax.swing.JFrame {
     private javax.swing.JButton jbtnDepositar;
     private javax.swing.JTextField jtfDepositar;
     // End of variables declaration//GEN-END:variables
+
 }

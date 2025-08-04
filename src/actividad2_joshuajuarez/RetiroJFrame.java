@@ -4,6 +4,8 @@
  */
 package actividad2_joshuajuarez;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 
 /**
@@ -104,6 +106,28 @@ public class RetiroJFrame extends javax.swing.JFrame {
         }else {
             this.dispose();
         }
+        
+        Connection con;
+    Conexion conn = new Conexion();
+    
+    try{
+        con = (Connection) conn.getConnection();
+        PreparedStatement ps = con.prepareStatement("UPDATE cuenta SET saldo = saldo - ? WHERE id = 1");
+        ps.setString(1,jtfRetirar.getText());
+        int res = ps.executeUpdate();
+        
+        if(res >0){
+            JOptionPane.showMessageDialog(null, "Retiro exitoso");
+        }else {
+            JOptionPane.showMessageDialog(null, "Error al retirar");
+        }
+        
+        con.close();
+        
+    }catch(Exception e){
+        System.err.print(e);
+        
+    }
     }//GEN-LAST:event_jbtnRetirarActionPerformed
 
     /**

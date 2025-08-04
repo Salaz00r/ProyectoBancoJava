@@ -4,6 +4,11 @@
  */
 package actividad2_joshuajuarez;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author josua
@@ -17,6 +22,27 @@ public class SaldoJFrame extends javax.swing.JFrame {
      */
     public SaldoJFrame() {
         initComponents();
+        
+        Connection con;
+       Conexion conn = new Conexion();
+    
+    try{
+        con = (Connection) conn.getConnection();
+        PreparedStatement ps = con.prepareStatement("SELECT saldo FROM cuenta WHERE id = 1");
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()){
+            jtfSaldo.setText(rs.getString("saldo"));
+        }else{
+            JOptionPane.showMessageDialog(null, "Error");
+        }
+         
+        con.close();
+        
+    }catch(Exception e){
+        System.err.print(e);
+        
+    }
     }
 
     /**
@@ -45,6 +71,11 @@ public class SaldoJFrame extends javax.swing.JFrame {
 
         jbtnSaldo.setBackground(new java.awt.Color(204, 204, 204));
         jbtnSaldo.setText("Continuar");
+        jbtnSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnSaldoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,6 +110,10 @@ public class SaldoJFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtnSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaldoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbtnSaldoActionPerformed
 
     /**
      * @param args the command line arguments
